@@ -56,13 +56,107 @@ function displayLibrary(library) {
     }
 }
 
-function getBookData() {
-    
+function addBook(event) {
+    let bookForm = document.createElement("form");
+    bookForm.classList.add("book-form");
+
+    let titleField = document.createElement("div");
+    titleField.classList.add("field");
+
+    let titleLabel = document.createElement("label");
+    titleLabel.setAttribute("for", "title");
+    titleLabel.textContent = "Title: ";
+    titleField.appendChild(titleLabel);
+
+    let titleInput = document.createElement("input");
+    titleInput.setAttribute("type", "text");
+    titleInput.setAttribute("id", "title");
+    titleInput.setAttribute("name", "title");
+    titleField.appendChild(titleInput);
+
+    bookForm.appendChild(titleField);
+
+    let authorField = document.createElement("div");
+    authorField.classList.add("field");
+
+    let authorLabel = document.createElement("label");
+    authorLabel.setAttribute("for", "author");
+    authorLabel.textContent = "Author: "
+    authorField.appendChild(authorLabel);
+
+    let authorInput = document.createElement("input");
+    authorInput.setAttribute("type", "text");
+    authorInput.setAttribute("id", "author");
+    authorInput.setAttribute("name", "author");
+    authorField.appendChild(authorInput);
+
+    bookForm.appendChild(authorField)
+
+    let pagesField = document.createElement("div");
+    pagesField.classList.add("field");
+
+    let pagesLabel = document.createElement("label");
+    pagesLabel.setAttribute("for", "pages");
+    pagesLabel.textContent = "Pages: ";
+    pagesField.appendChild(pagesLabel);
+
+    let pagesInput = document.createElement("input");
+    pagesInput.setAttribute("type", "text");
+    pagesInput.setAttribute("id", "title");
+    pagesInput.setAttribute("name", "title");
+    pagesField.appendChild(pagesInput);
+
+    bookForm.appendChild(pagesField);
+
+    let readYet = document.createElement("fieldset");
+    readYet.classList.add("field");
+
+    let legend = document.createElement("legend");
+    legend.textContent = "Read yet? ";
+    readYet.appendChild(legend);
+
+    let yesRead = document.createElement("div");
+
+    let readInput = document.createElement("input");
+    readInput.setAttribute("type", "radio");
+    readInput.setAttribute("id", "read");
+    readInput.setAttribute("name", "readYet");
+    readInput.setAttribute("value", true);
+    yesRead.appendChild(readInput);
+
+    let readLabel = document.createElement("label");
+    readLabel.setAttribute("for", "read");
+    readLabel.textContent = " Read";
+    yesRead.appendChild(readLabel);
+
+    readYet.appendChild(yesRead);
+
+    let unread = document.createElement("div");
+
+    let unreadInput = document.createElement("input");
+    unreadInput.setAttribute("type", "radio");
+    unreadInput.setAttribute("id", "unread");
+    unreadInput.setAttribute("name", "readYet");
+    unreadInput.setAttribute("value", false);
+    unread.appendChild(unreadInput);
+
+    let unreadLabel = document.createElement("label");
+    unreadLabel.setAttribute("for", "unread");
+    unreadLabel.textContent = " Unread";
+    unread.appendChild(unreadLabel);
+
+    readYet.appendChild(unread);
+
+    bookForm.appendChild(readYet);
+
+    let submitButton = document.createElement("button");
+    submitButton.textContent = "Add";
+    bookForm.appendChild(submitButton);
+
+    body.appendChild(bookForm);
 }
 
-function addBook() {
-
-}
+newBook.addEventListener("click", event => addBook(event));
 
 addBookToLibrary("Braiding Sweetgrass", "Robin Wall Kimmerer", 350, true, myLibrary);
 addBookToLibrary("The Odyssey", "Homer", 500, false, myLibrary);

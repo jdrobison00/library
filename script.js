@@ -56,6 +56,22 @@ function displayLibrary(library) {
     }
 }
 
+function submitForm(event, form) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const title = formData.get("title");
+    const author = formData.get("author");
+    const pages = formData.get("pages");
+    const read = formData.get("read");
+
+    addBookToLibrary(title, author, pages, read, myLibrary);
+
+    const newBook = new Book(title, author, pages, read);
+    displayBook(newBook);
+    body.removeChild(form);
+}
+
 function addBook(event) {
     let bookForm = document.createElement("form");
     bookForm.classList.add("book-form");
@@ -102,8 +118,8 @@ function addBook(event) {
 
     let pagesInput = document.createElement("input");
     pagesInput.setAttribute("type", "text");
-    pagesInput.setAttribute("id", "title");
-    pagesInput.setAttribute("name", "title");
+    pagesInput.setAttribute("id", "pages");
+    pagesInput.setAttribute("name", "pages");
     pagesField.appendChild(pagesInput);
 
     bookForm.appendChild(pagesField);
@@ -154,6 +170,8 @@ function addBook(event) {
     bookForm.appendChild(submitButton);
 
     body.appendChild(bookForm);
+
+    bookForm.addEventListener("submit", event => submitForm(event, bookForm));
 }
 
 newBook.addEventListener("click", event => addBook(event));

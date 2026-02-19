@@ -1,4 +1,6 @@
 const display = document.querySelector(".display");
+const body = document.querySelector("body");
+const newBook = document.querySelector(".new");
 
 const myLibrary = [];
 
@@ -8,6 +10,14 @@ function Book(title, author, pages, read) {
     this.pages = pages;
     this.read = read;
     this.id = crypto.randomUUID();
+}
+
+function deleteBook(event, book) {
+    const bookCard = event.target.parentElement;
+    
+    const bookIndex = myLibrary.findIndex( item => item.id === book.id);
+    myLibrary.splice(bookIndex, 1);
+    display.removeChild(bookCard);
 }
 
 function addBookToLibrary(title, author, pages, read, library) {
@@ -31,6 +41,11 @@ function displayBook(book) {
         read.textContent = "Already read";
     }
     card.appendChild(read);
+    let delButton = document.createElement("button");
+    delButton.classList.add("delete");
+    delButton.textContent = "Delete";
+    delButton.addEventListener("click", event => deleteBook(event, book));
+    card.appendChild(delButton);
 
     display.appendChild(card);
 }
@@ -39,6 +54,14 @@ function displayLibrary(library) {
     for (const book of library) {
         displayBook(book);
     }
+}
+
+function getBookData() {
+    
+}
+
+function addBook() {
+
 }
 
 addBookToLibrary("Braiding Sweetgrass", "Robin Wall Kimmerer", 350, true, myLibrary);

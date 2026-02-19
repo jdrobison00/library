@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+    --pavlova: #cacc9e;
+    --periwinkle: #b5d4fe;
+    --tulip: #b56e85;
+    --black-pearl: #06241f;
+    --white: #f7f6f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--white);
+    color: var(--black-pearl);
+    font-family: 'VT323', sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    padding: 3rem;
+    font-size: 3rem;
+    width: 100%;
+    text-align: center;
+    background-color: var(--pavlova);
+    border: 3px solid var(--black-pearl);
+}
+
+.display {
+    width: 100%;
+    max-width: 1200px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background-color: var(--periwinkle);
+    color: var(--black-pearl);
+    border: 3px dashed var(--black-pearl);
+    border-radius: 1rem;
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.card h2 {
+    margin-bottom: 0.5rem;
+}
+
+.delete {
+    margin-top: auto;
+    align-self: flex-end;
+    padding: 0.2rem 0.5rem;
+    border: 1.5px dashed var(--black-pearl);
+    border-radius: 0.5rem;
+    background-color: var(--periwinkle);
+    font-family: 'VT323', sans-serif;
+    font-size: 1.1rem;
+    font-weight: bolder;
+    color: var(--black-pearl);
+}
+
+.delete:hover {
+    font-size: 1.3rem;
+}
+
+.new {
+    padding: 0.6rem 1.2rem;
+    color: var(--black-pearl);
+    background-color: var(--pavlova);
+    border: 3px solid var(--black-pearl);
+    border-radius: 1rem;
+
+    font-size: 1.4rem;
+    font-family: 'VT323', sans-serif;
+    font-weight: bold;
+}
+
+.new:hover {
+    box-shadow: 1px 1px 3px var(--black-pearl);
+}

@@ -1,9 +1,12 @@
+// DOM Elements
 const display = document.querySelector(".display");
 const body = document.querySelector("body");
 const newBook = document.querySelector(".new");
 
 const myLibrary = [];
 
+
+// ===== BOOK CONSTRUCTOR & METHODS =====
 function Book(title, author, pages, read) {
     this.title = title;
     this.author = author;
@@ -16,34 +19,35 @@ Book.prototype.toggleRead = function() {
     this.read = !this.read;
 } 
 
-function pressToggle(event, book) {
-    const readSpan = event.target.parentElement;
+// ===== HELPER FUNCTIONS =====
 
-    //change object's status
-    book.toggleRead();
+function createInputField(labelText, inputId, inputName, inputType = "text") {
+    const field = document.createElement("div");
+    field.classList.add("field");
 
-    //change display
-    const read = readSpan.querySelector("p");
-    if(book.read === true) {
-        read.textContent = "Already read";
-    } else {
-        read.textContent = "Not read yet"
-    }
+    const label = document.createElement("label");
+    label.setAttribute("for", inputId);
+    label.textContent = labelText;
+    field.appendChild(label);
+
+    const input = document.createElement("input");
+    input.setAttribute("type", inputType);
+    input.setAttribute("id", inputId);
+    input.setAttribute("name", inputName);
+    field.appendChild(input);
+
+    return field;
 }
 
-function deleteBook(event, book) {
-    const bookCard = event.target.parentElement;
-    
-    const bookIndex = myLibrary.findIndex( item => item.id === book.id);
-    myLibrary.splice(bookIndex, 1);
-    display.removeChild(bookCard);
-}
+// ===== LIBRARY MANAGEMENT =====
 
 function addBookToLibrary(title, author, pages, read, library) {
     let book = new Book(title, author, pages, read);
     library.push(book);
     return book;
 }
+
+// ===== DISPLAY =====
 
 function displayBook(book) {
     // create card element
@@ -94,6 +98,31 @@ function displayLibrary(library) {
     }
 }
 
+// ===== EVENT HANDLERS
+
+function pressToggle(event, book) {
+    const readSpan = event.target.parentElement;
+
+    //change object's status
+    book.toggleRead();
+
+    //change display
+    const read = readSpan.querySelector("p");
+    if(book.read === true) {
+        read.textContent = "Already read";
+    } else {
+        read.textContent = "Not read yet"
+    }
+}
+
+function deleteBook(event, book) {
+    const bookCard = event.target.parentElement;
+    
+    const bookIndex = myLibrary.findIndex( item => item.id === book.id);
+    myLibrary.splice(bookIndex, 1);
+    display.removeChild(bookCard);
+}
+
 function submitForm(event, form) {
     event.preventDefault();
 
@@ -112,52 +141,13 @@ function addBook(event) {
     let bookForm = document.createElement("form");
     bookForm.classList.add("book-form");
 
-    let titleField = document.createElement("div");
-    titleField.classList.add("field");
-
-    let titleLabel = document.createElement("label");
-    titleLabel.setAttribute("for", "title");
-    titleLabel.textContent = "Title: ";
-    titleField.appendChild(titleLabel);
-
-    let titleInput = document.createElement("input");
-    titleInput.setAttribute("type", "text");
-    titleInput.setAttribute("id", "title");
-    titleInput.setAttribute("name", "title");
-    titleField.appendChild(titleInput);
-
+    const titleField = createInputField("Title: ", "title", "title");
     bookForm.appendChild(titleField);
 
-    let authorField = document.createElement("div");
-    authorField.classList.add("field");
+    const authorField = createInputField("Author: ", "author", "author");
+    bookForm.appendChild(authorField);
 
-    let authorLabel = document.createElement("label");
-    authorLabel.setAttribute("for", "author");
-    authorLabel.textContent = "Author: "
-    authorField.appendChild(authorLabel);
-
-    let authorInput = document.createElement("input");
-    authorInput.setAttribute("type", "text");
-    authorInput.setAttribute("id", "author");
-    authorInput.setAttribute("name", "author");
-    authorField.appendChild(authorInput);
-
-    bookForm.appendChild(authorField)
-
-    let pagesField = document.createElement("div");
-    pagesField.classList.add("field");
-
-    let pagesLabel = document.createElement("label");
-    pagesLabel.setAttribute("for", "pages");
-    pagesLabel.textContent = "Pages: ";
-    pagesField.appendChild(pagesLabel);
-
-    let pagesInput = document.createElement("input");
-    pagesInput.setAttribute("type", "text");
-    pagesInput.setAttribute("id", "pages");
-    pagesInput.setAttribute("name", "pages");
-    pagesField.appendChild(pagesInput);
-
+    const pagesField = createInputField("Pages: ", "pages", "pages");
     bookForm.appendChild(pagesField);
 
     let readYet = document.createElement("fieldset");
@@ -209,6 +199,8 @@ function addBook(event) {
 
     bookForm.addEventListener("submit", event => submitForm(event, bookForm));
 }
+
+// INITIALIZATION
 
 newBook.addEventListener("click", event => addBook(event));
 

@@ -1,22 +1,22 @@
 // DOM Elements
-const display = document.querySelector(".display");
-const body = document.querySelector("body");
-const newBook = document.querySelector(".new");
+const booksContainer = document.querySelector(".display");
+const documentBody = document.querySelector("body");
+const addBookButton = document.querySelector(".new");
 
-const myLibrary = [];
+const library = [];
 
 
 // ===== BOOK CONSTRUCTOR & METHODS =====
-function Book(title, author, pages, read) {
+function Book(title, author, pages, isRead) {
     this.title = title;
     this.author = author;
     this.pages = pages;
-    this.read = read;
+    this.isRead = isRead;
     this.id = crypto.randomUUID();
 }
 
 Book.prototype.toggleRead = function() {
-    this.read = !this.read;
+    this.isRead = !this.isRead;
 } 
 
 // ===== HELPER FUNCTIONS =====
@@ -41,66 +41,66 @@ function createInputField(labelText, inputId, inputName, inputType = "text") {
 
 // ===== LIBRARY MANAGEMENT =====
 
-function addBookToLibrary(title, author, pages, read, library) {
-    let book = new Book(title, author, pages, read);
+function createAndAddBook(title, author, pages, isRead, library) {
+    let book = new Book(title, author, pages, isRead);
     library.push(book);
     return book;
 }
 
 // ===== DISPLAY =====
 
-function displayBook(book) {
+function displayBookCard(book) {
     // create card element
-    let card = document.createElement("div");
-    card.classList.add("card");
+    let cardEl = document.createElement("div");
+    cardEl.classList.add("card");
 
     //title+author line
-    let titleAuthor = document.createElement("h2");
-    titleAuthor.textContent = `${book.title} by ${book.author}`;
-    card.appendChild(titleAuthor);
+    let titleAuthorEl = document.createElement("h2");
+    titleAuthorEl.textContent = `${book.title} by ${book.author}`;
+    cardEl.appendChild(titleAuthorEl);
 
     //num pages line
-    let pages = document.createElement("p");
-    pages.textContent = `Pages: ${book.pages}`;
-    card.appendChild(pages);
+    let pagesEl = document.createElement("p");
+    pagesEl.textContent = `Pages: ${book.pages}`;
+    cardEl.appendChild(pagesEl);
 
     //read or unread
-    let readSpan = document.createElement("span");
-    readSpan.classList.add("read-line")
-    let read = document.createElement("p")
-    if(book.read === false) {
-        read.textContent = "Not read yet";
+    let readLineEl = document.createElement("span");
+    readLineEl.classList.add("read-line")
+    let readStatusEl = document.createElement("p")
+    if(book.isRead === false) {
+        readStatusEl.textContent = "Not read yet";
     } else {
-        read.textContent = "Already read";
+        readStatusEl.textContent = "Already read";
     }
-    readSpan.appendChild(read);
-    let readButton = document.createElement("button");
-    readButton.classList.add("toggle");
-    readButton.textContent = "Toggle";
-    readButton.addEventListener("click", event => pressToggle(event, book));
-    readSpan.appendChild(readButton);
-    card.appendChild(readSpan);
+    readLineEl.appendChild(readStatusEl);
+    let toggleReadEl = document.createElement("button");
+    toggleReadEl.classList.add("toggle");
+    toggleReadEl.textContent = "Toggle";
+    toggleReadEl.addEventListener("click", event => handleToggleRead(event, book));
+    readLineEl.appendChild(toggleReadEl);
+    cardEl.appendChild(readLineEl);
 
     //delete button
-    let delButton = document.createElement("button");
-    delButton.classList.add("delete");
-    delButton.textContent = "Delete";
-    delButton.addEventListener("click", event => deleteBook(event, book));
-    card.appendChild(delButton);
+    let deleteButtonEl = document.createElement("button");
+    deleteButtonEl.classList.add("delete");
+    deleteButtonEl.textContent = "Delete";
+    deleteButtonEl.addEventListener("click", event => handleDeleteBook(event, book));
+    cardEl.appendChild(deleteButtonEl);
 
     //add card to display
-    display.appendChild(card);
+    booksContainer.appendChild(cardEl);
 }
 
 function displayLibrary(library) {
     for (const book of library) {
-        displayBook(book);
+        displayBookCard(book);
     }
 }
 
 // ===== EVENT HANDLERS
 
-function pressToggle(event, book) {
+function handleToggleRead(event, book) {
     const readSpan = event.target.parentElement;
 
     //change object's status
@@ -108,100 +108,100 @@ function pressToggle(event, book) {
 
     //change display
     const read = readSpan.querySelector("p");
-    if(book.read === true) {
+    if(book.isRead === true) {
         read.textContent = "Already read";
     } else {
         read.textContent = "Not read yet"
     }
 }
 
-function deleteBook(event, book) {
+function handleDeleteBook(event, book) {
     const bookCard = event.target.parentElement;
     
-    const bookIndex = myLibrary.findIndex( item => item.id === book.id);
-    myLibrary.splice(bookIndex, 1);
-    display.removeChild(bookCard);
+    const bookIndex = library.findIndex( item => item.id === book.id);
+    library.splice(bookIndex, 1);
+    booksContainer.removeChild(bookCard);
 }
 
-function submitForm(event, form) {
+function handleFormSubmit(event, form) {
     event.preventDefault();
 
     const formData = new FormData(form);
     const title = formData.get("title");
     const author = formData.get("author");
     const pages = formData.get("pages");
-    const read = formData.get("read");
+    const isRead = formData.get("readYet");
 
-    const newBook = addBookToLibrary(title, author, pages, read, myLibrary);
-    displayBook(newBook);
-    body.removeChild(form);
+    const newBook = createAndAddBook(title, author, pages, isRead, library);
+    displayBookCard(newBook);
+    documentBody.removeChild(form);
 }
 
-function addBook(event) {
-    let bookForm = document.createElement("form");
-    bookForm.classList.add("book-form");
+function showAddBookForm(event) {
+    let formEl = document.createElement("form");
+    formEl.classList.add("book-form");
 
-    const titleField = createInputField("Title: ", "title", "title");
-    bookForm.appendChild(titleField);
+    const titleFieldEl = createInputField("Title: ", "title", "title");
+    formEl.appendChild(titleFieldEl);
 
-    const authorField = createInputField("Author: ", "author", "author");
-    bookForm.appendChild(authorField);
+    const authorFieldEl = createInputField("Author: ", "author", "author");
+    formEl.appendChild(authorFieldEl);
 
-    const pagesField = createInputField("Pages: ", "pages", "pages");
-    bookForm.appendChild(pagesField);
+    const pagesFieldEl = createInputField("Pages: ", "pages", "pages");
+    formEl.appendChild(pagesFieldEl);
 
-    let readYet = document.createElement("fieldset");
-    readYet.classList.add("field");
+    let readOptionsFieldset = document.createElement("fieldset");
+    readOptionsFieldset.classList.add("field");
 
     let legend = document.createElement("legend");
     legend.textContent = "Read yet? ";
-    readYet.appendChild(legend);
+    readOptionsFieldset.appendChild(legend);
 
-    let yesRead = document.createElement("div");
+    let readOptionYesEl = document.createElement("div");
 
-    let readInput = document.createElement("input");
-    readInput.setAttribute("type", "radio");
-    readInput.setAttribute("id", "read");
-    readInput.setAttribute("name", "readYet");
-    readInput.setAttribute("value", true);
-    yesRead.appendChild(readInput);
+    let readYesInputEl = document.createElement("input");
+    readYesInputEl.setAttribute("type", "radio");
+    readYesInputEl.setAttribute("id", "read");
+    readYesInputEl.setAttribute("name", "readYet");
+    readYesInputEl.setAttribute("value", true);
+    readOptionYesEl.appendChild(readYesInputEl);
 
     let readLabel = document.createElement("label");
     readLabel.setAttribute("for", "read");
     readLabel.textContent = " Read";
-    yesRead.appendChild(readLabel);
+    readOptionYesEl.appendChild(readLabel);
 
-    readYet.appendChild(yesRead);
+    readOptionsFieldset.appendChild(readOptionYesEl);
 
-    let unread = document.createElement("div");
+    let readOptionNoEl = document.createElement("div");
 
-    let unreadInput = document.createElement("input");
-    unreadInput.setAttribute("type", "radio");
-    unreadInput.setAttribute("id", "unread");
-    unreadInput.setAttribute("name", "readYet");
-    unreadInput.setAttribute("value", false);
-    unread.appendChild(unreadInput);
+    let readNoInputEl = document.createElement("input");
+    readNoInputEl.setAttribute("type", "radio");
+    readNoInputEl.setAttribute("id", "unread");
+    readNoInputEl.setAttribute("name", "readYet");
+    readNoInputEl.setAttribute("value", false);
+    readOptionNoEl.appendChild(readNoInputEl);
 
     let unreadLabel = document.createElement("label");
     unreadLabel.setAttribute("for", "unread");
     unreadLabel.textContent = " Unread";
-    unread.appendChild(unreadLabel);
+    readOptionNoEl.appendChild(unreadLabel);
 
-    readYet.appendChild(unread);
+    readOptionsFieldset.appendChild(readOptionNoEl);
 
-    bookForm.appendChild(readYet);
+    formEl.appendChild(readOptionsFieldset);
 
     let submitButton = document.createElement("button");
     submitButton.textContent = "Add";
-    bookForm.appendChild(submitButton);
+    formEl.appendChild(submitButton);
 
-    body.appendChild(bookForm);
+    documentBody.appendChild(formEl);
 
-    bookForm.addEventListener("submit", event => submitForm(event, bookForm));
+    formEl.addEventListener("submit", event => handleFormSubmit(event, formEl));
 }
 
 // INITIALIZATION
 
-newBook.addEventListener("click", event => addBook(event));
+addBookButton.addEventListener("click", event => showAddBookForm(event));
 
-displayLibrary(myLibrary);
+displayLibrary(library);

@@ -61,6 +61,22 @@ h1 {
     margin-bottom: 0.5rem;
 }
 
+.read-line {
+    display: flex;
+    gap: 1rem;
+}
+
+.toggle {
+    padding: 0.15rem 0.4rem;
+    border: 1.5px dashed var(--tulip);
+    border-radius: 0.4rem;
+    background-color: var(--white);
+    font-family: 'VT323', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--black-pearl);
+}
+
 .delete {
     margin-top: auto;
     align-self: flex-end;
